@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import Header from "./components/Header";
 import TodoList from "./components/TodoList";
 import Footer from "./components/Footer";
+import Todo from "./components/Todo";
 
 export const FILTER_STATUS = {
   ACTIVE: "ACTIVE",
@@ -28,24 +29,28 @@ const filterByStatus = (todo = [], status = "", id = "") => {
 };
 //PureComponent giup check state co thay doi hay khong(shadow). Nhung chi check dc 1 lop con nhieu lop thi phai tu check.
 class App extends React.PureComponent {
-  state = {
-    todoList: [
-      {
-        id: 1,
-        content: "todo 1",
-        isCompleted: true,
-      },
-      {
-        id: 2,
-        content: "todo 2",
-        isCompleted: false,
-      },
-    ],
-    isCheckedAll: false,
-    status: "ALL",
-    currentPage: 1,
-    pageSize: 5,
-  };
+  constructor(props){
+    super(props);
+    this.componentRef = React.createRef();
+    this.state = {
+      todoList: [
+        {
+          id: 1,
+          content: "todo 1",
+          isCompleted: true,
+        },
+        {
+          id: 2,
+          content: "todo 2",
+          isCompleted: false,
+        },
+      ],
+      isCheckedAll: false,
+      status: "ALL",
+      currentPage: 1,
+      pageSize: 5,
+    };
+  }
   // useEffect(() => {
   //   filterByStatus(currentPost, status)
   // })
@@ -115,15 +120,33 @@ class App extends React.PureComponent {
       todoList: filterByStatus(todoList, FILTER_STATUS.REMOVE, id),
     });
   };
+
   handlePageClick = (data) => {
     console.log(data.selected)
     this.setState({ currentPage : data.selected +1})
   }
 
-  setDefaultCurrentPage = (currentPage) => {
+  setDefaultCurrentPage = () => {
     this.setState({
-      currentPage
+      currentPage: this.state.currentPage - 1
   })
+  }
+
+  componentDidUpdate(){
+    const { todoList, status,currentPage,pageSize} = this.state;
+    const afterFilterTodoList = filterByStatus(todoList, status);
+    const lastPostIndex = currentPage*pageSize;
+    const firstPostIndex = lastPostIndex - pageSize;
+    const currentPost = afterFilterTodoList.slice(firstPostIndex ,lastPostIndex);
+    if(currentPost.length === 0){
+      this.setDefaultCurrentPage();
+    }
+  }
+
+  focusInputInHeader = () =>{
+    // console.log(this.componentRef.current);
+    this.headerRef.focusInput();
+    // this.inputHeaderRef.current.value='ok'
   }
 
 
@@ -136,7 +159,6 @@ class App extends React.PureComponent {
     const firstPostIndex = lastPostIndex - pageSize;
     const currentPost = afterFilterTodoList.slice(firstPostIndex ,lastPostIndex);
     const pageCount = Math.ceil(numOfTodo / pageSize);
-    console.log(currentPage)
 
     return (
       <div className="todoapp">
@@ -144,9 +166,10 @@ class App extends React.PureComponent {
           addTodo={this.addTodo}
           isCheckedAll={isCheckedAll}
           numOfTodo={todoList.length}
+          ref={(ref) => {this.headerRef=ref}}
         />
         <TodoList
-        currentPost={currentPost}
+          currentPost={currentPost}
           todoList={filterByStatus(currentPost, status)}
           numOfTodo={numOfTodo}
           onEditTodo={this.onEditTodo}
@@ -154,6 +177,8 @@ class App extends React.PureComponent {
           isCheckedAll={isCheckedAll}
           checkAllTodo={this.checkAllTodo}
           removeTodo={this.removeTodo}
+          focusInputInHeader={this.focusInputInHeader}
+          ref={this.componentRef}
         />
         <Footer
           FILTER_STATUS={FILTER_STATUS}

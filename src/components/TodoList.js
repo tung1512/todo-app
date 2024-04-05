@@ -4,8 +4,9 @@ import Todo from "./Todo";
 class TodoList extends React.Component {
   constructor(props) {
     super(props);
-    this.state
+    this.todoListRef = React.createRef();
   }
+
 
 
   render(){
@@ -27,6 +28,7 @@ class TodoList extends React.Component {
             //chuyen object todo
             todoList.map((todo, index) => (
               <Todo 
+              // ref={this.todoListRef}
               key={`todo${todo.id}`}
               {...{ todo } } 
               {...this.props} 

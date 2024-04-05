@@ -3,6 +3,8 @@ import React, {memo, useState} from 'react'
 class Header extends React.Component{
     constructor(props){
         super(props);
+        this.inputRef = React.createRef();
+
         this.state = {
             value : ''
         }
@@ -19,6 +21,10 @@ class Header extends React.Component{
                 this.setState({value: ''});
         }
     }
+    focusInput(){
+        // console.log(this.inputRef.current);
+        this.inputRef.current.focus();
+      }
 
     render(){
         return(
@@ -26,6 +32,7 @@ class Header extends React.Component{
                 <h1>todos</h1>
                 <input 
                 className='new-todo'
+                ref={this.inputRef}
                 placeholder='What needs to be done?'
                 value={this.state.value}
                 onChange={(e) => this.setState({value : e.target.value})}

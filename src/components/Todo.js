@@ -1,9 +1,11 @@
 
 import React, { PureComponent } from 'react';
+// import Header from './Header';
 
 class Todo extends PureComponent {
   constructor(props) {
     super(props);
+    this.todoRef = React.createRef();
     this.state = {
       content: props.todo.content,
       todoEditingId: ''
@@ -22,10 +24,13 @@ class Todo extends PureComponent {
   handleEditTodo = () => {
     const { todo, index, onEditTodo } = this.props;
     const { content } = this.state;
-    // console.log(`todo: ${todo}, content: ${"" + content}}`);
     onEditTodo({ ...todo, content }, index);
     this.setState({todoEditingId: ''})
   };
+  
+  clickHandlerEdit = () =>{
+    this.props.focusInputInHeader();
+  }
 
   render() {
     const { todo, markCompleted, removeTodo } = this.props;
@@ -43,7 +48,9 @@ class Todo extends PureComponent {
               checked={todo.isCompleted}
               onChange={() => { markCompleted(todo.id) }}
             />
+            {/* <Header ref={this.componentRef}/> */}
             <label onDoubleClick={() => this.getTodoEditingId(todo.id)}>{todo.content}</label>
+            <button className='editTodo' onClick={this.clickHandlerEdit} ></button>
             <button className='destroy' onClick={() => removeTodo(todo.id)}></button>
           </div>
         ) : (
