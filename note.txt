@@ -1,0 +1,13 @@
+- React Ref(React reference) là 1 đối tượng tham chiếu đến 1 biến, 1 component giữ cho giá trị của nó không thay đổi giữa các lần render và truy cập thông qua 'curent'
+- Ref không trigger render lại component.(nếu không sử dụng state hoặc 1 số kỹ thuật khác để trigger render lại component thì giá trị của ref sẽ không thay đổi trên giao diện)
+- Không nên làm với ref: 
++ không cập nhật hoặc đọc trực tiếp tham chiếu trong khi render(ngoại lên là lazy initialization)
+* lazy initialization khi ref k có giá trị mới gán giá trị mới cho nó.
+=> bởi vì cơ chế concurrent rendering: với concurrent mode thì qtrinh này diễn ra bất đồng bộ nên việc hiển thị của 1 số thành phần sẽ bị 'tạm dừng'
+- Các trường hợp nên sử dụng: 
++ Tham chiếu đến real DOM elements
++ Sử dụng forwardRef cho component: nếu muốn ref 1 component chứ không phải giá trị trong component
+
+- phải giao tiếp tuần tự
+
+- cha lấy dữ liệu từ còn bằng cách referent bằng 

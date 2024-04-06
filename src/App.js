@@ -32,6 +32,7 @@ class App extends React.PureComponent {
   constructor(props){
     super(props);
     this.componentRef = React.createRef();
+    this.indexRef = React.createRef(0);
     this.state = {
       todoList: [
         {
@@ -143,10 +144,8 @@ class App extends React.PureComponent {
     }
   }
 
-  focusInputInHeader = () =>{
-    // console.log(this.componentRef.current);
-    this.headerRef.focusInput();
-    // this.inputHeaderRef.current.value='ok'
+  focusInputInHeader = (todo, index) =>{
+    this.componentRef.current.focusInput(todo, index);
   }
 
 
@@ -159,14 +158,16 @@ class App extends React.PureComponent {
     const firstPostIndex = lastPostIndex - pageSize;
     const currentPost = afterFilterTodoList.slice(firstPostIndex ,lastPostIndex);
     const pageCount = Math.ceil(numOfTodo / pageSize);
-
+    
     return (
       <div className="todoapp">
         <Header
           addTodo={this.addTodo}
           isCheckedAll={isCheckedAll}
           numOfTodo={todoList.length}
-          ref={(ref) => {this.headerRef=ref}}
+          ref={this.componentRef}
+          onEditTodo={this.onEditTodo}
+          focusInputInHeader={this.focusInputInHeader}
         />
         <TodoList
           currentPost={currentPost}
@@ -178,7 +179,6 @@ class App extends React.PureComponent {
           checkAllTodo={this.checkAllTodo}
           removeTodo={this.removeTodo}
           focusInputInHeader={this.focusInputInHeader}
-          ref={this.componentRef}
         />
         <Footer
           FILTER_STATUS={FILTER_STATUS}

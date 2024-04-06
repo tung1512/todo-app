@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 class Todo extends PureComponent {
   constructor(props) {
     super(props);
-    this.todoRef = React.createRef();
+    // this.todoRef = React.createRef();
     this.state = {
       content: props.todo.content,
       todoEditingId: ''
@@ -27,16 +27,13 @@ class Todo extends PureComponent {
     onEditTodo({ ...todo, content }, index);
     this.setState({todoEditingId: ''})
   };
+
   
-  clickHandlerEdit = () =>{
-    this.props.focusInputInHeader();
-  }
 
   render() {
-    const { todo, markCompleted, removeTodo } = this.props;
+    const { todo, markCompleted, removeTodo, handleEditTodo, index } = this.props;
     const { content, todoEditingId } = this.state;
     const isEditing = todoEditingId === todo.id;
-
 
     return (
       <li className={`${isEditing ? 'editing' : ''} ${todo.isCompleted ? 'completed' : ''}`}>
@@ -50,7 +47,7 @@ class Todo extends PureComponent {
             />
             {/* <Header ref={this.componentRef}/> */}
             <label onDoubleClick={() => this.getTodoEditingId(todo.id)}>{todo.content}</label>
-            <button className='editTodo' onClick={this.clickHandlerEdit} ></button>
+            <button className='editTodo' onClick={() => handleEditTodo(todo,index)} ></button>
             <button className='destroy' onClick={() => removeTodo(todo.id)}></button>
           </div>
         ) : (

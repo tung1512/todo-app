@@ -4,13 +4,13 @@ import Todo from "./Todo";
 class TodoList extends React.Component {
   constructor(props) {
     super(props);
-    this.todoListRef = React.createRef();
+    // this.todoListRef = React.createRef();
   }
 
 
 
   render(){
-    const { todoList, isCheckedAll, checkAllTodo } = this.props;
+    const { todoList, isCheckedAll, checkAllTodo,focusInputInHeader,getIndex } = this.props;
     return (
       <section className="main">
         <input 
@@ -33,6 +33,7 @@ class TodoList extends React.Component {
               {...{ todo } } 
               {...this.props} 
               index={index} 
+              handleEditTodo={focusInputInHeader}
               />
             )
             )
